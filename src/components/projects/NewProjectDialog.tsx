@@ -6,13 +6,14 @@ import {ApplicationState, EnumOption} from "../../types";
 import {Dispatch} from "redux";
 import {Project} from "@wayred/core";
 import {useForm} from "react-hook-form";
-import {Button, Classes, Dialog} from "@blueprintjs/core";
+import {Button, Classes, Dialog, FormGroup, HTMLSelect} from "@blueprintjs/core";
 import {Select} from "@blueprintjs/select";
+import {projectCreate} from "../../actions/project.actions";
 
 export type NewProjectModalProps = {
   visible: boolean;
   onCancel: () => void;
-  onProjectCreated: (project: Project) => void;
+  onCreate: (name: string, type: string) => void;
 };
 
 const projectTypes = [
@@ -25,12 +26,14 @@ const ProjectTypeSelect = Select.ofType<EnumOption>();
 const NewProjectDialog = (props: NewProjectModalProps) => {
   const {handleSubmit, errors, setValue, register} = useForm();
 
-  useEffect(() => {
-    register({name: "type"}, {required: true});
-    register({name: "name"}, {required: true, maxLength: 50});
-  }, [register]);
+  // useEffect(() => {
+  //   register({name: "type"}, {required: true});
+  //   register({name: "name"}, {required: true, maxLength: 50});
+  // }, [register]);
 
   const onSubmit = (data: any) => {
+    props.onCreate(data.name, data.type);
+    if (true) return;
     const project = {
       name: data.name,
       type: data.type?.key
@@ -45,17 +48,33 @@ const NewProjectDialog = (props: NewProjectModalProps) => {
       }
     }).then((response) => response.json())
       .then((json) => {
-        props.onProjectCreated(json);
+        // props.onProjectCreated(json);
       })
       .catch((error) => console.error(error));
   };
 
   return (
     <Dialog isOpen={props.visible} title="New Project" onClose={() => props.onCancel()}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={Classes.DIALOG_BODY}>
+          <FormGroup label="Name" labelFor="projectName">
+            <input id="projectName" className={Classes.INPUT} name="name" ref={register}/>
+          </FormGroup>
 
-      <label>Name</label>
-      <input className={Classes.INPUT} name="name"/>
+          <FormGroup label="Type" labelFor="projectType">
+            <HTMLSelect id="projectType" name="type" elementRef={register}>
+              <option>Select a type</option>
+              <option value="react">react</option>
+              <option value="react-native">react-native</option>
+            </HTMLSelect>
+          </FormGroup>
+        </div>
 
+        <div className={Classes.DIALOG_FOOTER}>
+          <Button intent="primary" text="Create" type="submit"/>
+          <Button text="Cancel" onClick={props.onCancel}/>
+        </div>
+      </form>
       {/*<ProjectTypeSelect*/}
       {/*  items={projectTypes}*/}
       {/*  itemPredicate={Films.itemPredicate}*/}
@@ -96,7 +115,7 @@ const mapStateToProps = (state: ApplicationState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     onCancel: () => dispatch(hideModal('newProject')),
-    onProjectCreated: (project: Project) => dispatch(newProjectCreated(project)),
+    onCreate: (name: string, type: string) => dispatch(projectCreate(name, type)),
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(NewProjectDialog);

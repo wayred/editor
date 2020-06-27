@@ -6,8 +6,10 @@ import {modals} from "./reducers/modals";
 import {selectedView} from "./reducers/selectedView";
 import {registry} from "./reducers/registry";
 import {refresher} from "./reducers/refresher";
+import {workspace} from "./reducers/workspace.reducer";
 
 const reducers = combineReducers({
+  workspace,
   project,
   selectedNode,
   modals,

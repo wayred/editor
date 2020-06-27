@@ -5,8 +5,13 @@ import SplitPane from "react-split-pane";
 import TabbedPane from "./TabbedPane";
 import Preview from "./Preview";
 import Inspector from "./Inspector";
+import {Workspace} from "../types";
 
-const Workspace = () => {
+type WorkspaceProps = {
+  workspace: Workspace;
+}
+
+const WorkspaceComponent = (props: WorkspaceProps) => {
   return (
       <SplitPane split="vertical" minSize={300} defaultSize="25%">
         <Inspector/>
@@ -21,4 +26,4 @@ const Workspace = () => {
   )
 };
 
-export default Workspace;
+export default WorkspaceComponent;

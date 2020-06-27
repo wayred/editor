@@ -19,7 +19,8 @@ export type ModalType =
   | 'error'
   | 'warning'
   | 'info'
-  | 'newProject';
+  | 'newProject'
+  | 'newView';
 
 export type ModalsState = {
   [name in ModalType]?: {
@@ -28,6 +29,7 @@ export type ModalsState = {
 }
 
 export type ApplicationState = {
+  workspace: Workspace | null;
   modals: ModalsState;
   project?: Project;
   selectedView?: string;
@@ -63,3 +65,9 @@ export type Registry = {
   };
   contexts: string[];
 } | null;
+
+export type Workspace = {
+  project: Project | null;
+  selectedViewId: string | null;
+  selectedNodeId: string | null;
+}

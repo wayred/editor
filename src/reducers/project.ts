@@ -8,13 +8,13 @@ import {
   VIEW_SET_AS_MAIN,
   NODE_ADD,
   NODE_PROPERTY_UPDATE,
-  NODE_PROPERTY_RENAME,
-  PROJECT_IMPORT
+  NODE_PROPERTY_RENAME
 } from "../actions/actionTypes";
 import {Action} from "../types";
 import {findNodeById, getNodeById, getViewById} from "../helpers";
 import {Project} from "@wayred/core";
 import _ from "lodash";
+import {PROJECT_IMPORT} from "../actions/project.actions";
 
 const initialState: Project | null = null;
 

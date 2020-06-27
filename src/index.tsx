@@ -7,12 +7,14 @@ import store from './store'
 import {Provider} from "react-redux";
 // import dialogs
 import NewProjectDialog from "./components/projects/NewProjectDialog";
+import NewViewDialog from "./components/views/NewViewDialog";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
       <NewProjectDialog/>
+      <NewViewDialog/>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

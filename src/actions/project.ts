@@ -1,9 +1,10 @@
 import {
   FETCH_PROJECT_CREATE_SUCCESS,
   FETCH_PROJECT_LOAD_REQUEST,
-  FETCH_PROJECT_LOAD_SUCCESS, FETCH_PROJECT_LOAD_FAILURE, PROJECT_IMPORT 
+  FETCH_PROJECT_LOAD_SUCCESS, FETCH_PROJECT_LOAD_FAILURE
 } from "./actionTypes";
 import {Project} from "@wayred/core";
+import {PROJECT_IMPORT} from "./project.actions";
 
 export const newProjectCreated = (project: Project) => {
   return {

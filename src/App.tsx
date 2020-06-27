@@ -5,23 +5,28 @@ import '@blueprintjs/core/lib/css/blueprint.css';
 import './App.css';
 import { Column, Row } from '@wayred/rc-blueprint';
 import Header from "./components/Header";
-import Workspace from "./components/Workspace";
-import UserCard from "./UserCard";
-import UserCardConnected from "./UserCardConnected";
+import WorkspaceComponent from "./components/Workspace";
+import {ApplicationState, Workspace} from "./types";
+import {connect} from "react-redux";
 
+type AppProps = {
+  workspace: Workspace | null;
+}
 
-
-function App() {
+function App(props: AppProps) {
   return (
     <Column styles={{height: '100%'}}>
       <Header/>
       <Row styles={{flex: 1}}>
-        {/*<Workspace/>*/}
-        <UserCard userName={'peter'}/>
-        <UserCardConnected userName={'peter'}/>
+        {props.workspace && <WorkspaceComponent workspace={props.workspace}/>}
       </Row>
     </Column>
   );
 }
 
-export default App;
+const mapStateToProps = (state: ApplicationState) => {
+  return {
+    workspace: state.workspace
+  }
+}
+export default connect(mapStateToProps)(App);
