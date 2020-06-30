@@ -1,4 +1,6 @@
-import React from "react";
+/** @jsx jsx */
+import {jsx} from '@emotion/core';
+import React, {useRef} from "react";
 import {Dispatch} from "redux";
 import {Alignment, Button, Classes, H2, Icon, Menu, Navbar, Popover} from "@blueprintjs/core";
 import {Position} from "@blueprintjs/core/lib/esm/common/position";
@@ -6,16 +8,37 @@ import {showModal} from "../actions/modals";
 import {connect} from "react-redux";
 import {ApplicationState, Workspace} from "../types";
 import {viewDelete, viewSetAsMain} from "../actions/view.actions";
+import {downloadJsonFile} from "../helpers";
+import {workspace} from "../reducers/workspace.reducer";
+import {workspaceImport} from "../actions/workspace.actions";
 
 type HeaderProps = {
   showModal: (name: string) => void;
   workspace: Workspace | null;
   onViewSetAsMain: (id: string) => void;
   onViewDelete: (id: string) => void;
+  onImport: (workspace: Workspace) => void;
 }
 
 const Header = (props: HeaderProps) => {
+  const inputFile = useRef() as React.MutableRefObject<HTMLInputElement>;
   // const a = Classes.MINIMAL;
+  const onExportHandler = () => {
+    downloadJsonFile(props.workspace);
+  }
+  const onChangeFile = async (event: any) => {
+    event.preventDefault();
+    var file = event.target.files[0];
+    if (file !== undefined) {
+      const reader = new FileReader();
+      reader.onload = async (e: any) => {
+        const text = (e.target.result);
+        var project = JSON.parse(text);
+        props.onImport(project);
+      };
+      reader.readAsText(file);
+    }
+  }
   const projectMenu = (
     <Menu>
       <Menu.Item icon="plus" onClick={() => props.showModal('newProject')} text="New"/>
@@ -25,10 +48,19 @@ const Header = (props: HeaderProps) => {
       <Menu.Item icon="trash" onClick={() => {
       }} text="Delete"/>
       <Menu.Divider/>
-      <Menu.Item icon="export" onClick={() => {
-      }} text="Export"/>
-      <Menu.Item icon="import" onClick={() => {
-      }} text="Import"/>
+      <Menu.Item icon="import" onClick={onExportHandler} text="Export"/>
+      <li>
+        <label>
+          <input
+            ref={inputFile}
+            onChange={(e) => onChangeFile(e)}
+            style={{display: "none"}}
+            type="file"
+            accept=".json"/>
+          <a className="bp3-menu-item bp3-icon-export">Import</a>
+        </label>
+      </li>
+      {/*<Menu.Item icon="import" onClick={() => {}} text="Import"/>*/}
     </Menu>
   );
   const viewMenu = (
@@ -83,7 +115,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     showModal: (name: string) => dispatch(showModal(name)),
     onViewSetAsMain: (id: string) => dispatch(viewSetAsMain(id)),
-    onViewDelete: (id: string) => dispatch(viewDelete(id))
+    onViewDelete: (id: string) => dispatch(viewDelete(id)),
+    onImport: (workspace: Workspace) => dispatch(workspaceImport(workspace))
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

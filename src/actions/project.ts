@@ -1,10 +1,10 @@
 import {
   FETCH_PROJECT_CREATE_SUCCESS,
   FETCH_PROJECT_LOAD_REQUEST,
-  FETCH_PROJECT_LOAD_SUCCESS, FETCH_PROJECT_LOAD_FAILURE
+  FETCH_PROJECT_LOAD_SUCCESS,
+  FETCH_PROJECT_LOAD_FAILURE
 } from "./actionTypes";
 import {Project} from "@wayred/core";
-import {PROJECT_IMPORT} from "./project.actions";
 
 export const newProjectCreated = (project: Project) => {
   return {
@@ -13,12 +13,12 @@ export const newProjectCreated = (project: Project) => {
   }
 }
 
-export const projectImport = (project: Project) => {
-  return {
-    type: PROJECT_IMPORT,
-    payload: project
-  }
-}
+// export const projectImport = (project: Project) => {
+//   return {
+//     type: PROJECT_IMPORT,
+//     payload: project
+//   }
+// }
 
 export const fetchProjectLoadRequest = (projectId: string) => {
   return {

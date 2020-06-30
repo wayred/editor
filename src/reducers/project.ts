@@ -14,7 +14,6 @@ import {Action} from "../types";
 import {findNodeById, getNodeById, getViewById} from "../helpers";
 import {Project} from "@wayred/core";
 import _ from "lodash";
-import {PROJECT_IMPORT} from "../actions/project.actions";
 
 const initialState: Project | null = null;
 
@@ -48,8 +47,8 @@ export const project = (state: Project | null = initialState, action: Action) =>
       return state;
     case FETCH_PROJECT_CREATE_SUCCESS:
       return action.payload;
-    case PROJECT_IMPORT:
-      return action.payload;
+    // case PROJECT_IMPORT:
+    //   return action.payload;
     case DELETE_PROJECT_REQUEST:
       return {
         name: action.payload.name,

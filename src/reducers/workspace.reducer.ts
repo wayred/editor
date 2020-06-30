@@ -3,11 +3,14 @@ import {PROJECT_CREATE} from "../actions/project.actions";
 import {VIEW_CREATE, VIEW_DELETE, VIEW_SELECT, VIEW_SET_AS_MAIN} from "../actions/view.actions";
 import {uuid} from "../helpers";
 import {Project} from "@wayred/core";
+import {WORKSPACE_IMPORT} from "../actions/workspace.actions";
 
 const initialState: Workspace | null = null;
 
 export const workspace = (state: Workspace | null = initialState, action: Action) => {
   switch (action.type) {
+    case WORKSPACE_IMPORT:
+      return action.payload.workspace;
     case VIEW_DELETE:
       const ws = {...state} as Workspace;
       if (ws.project?.mainView === action.payload.id) {
