@@ -4,11 +4,21 @@ import {VIEW_CREATE, VIEW_DELETE, VIEW_SELECT, VIEW_SET_AS_MAIN} from "../action
 import {uuid} from "../helpers";
 import {Project} from "@wayred/core";
 import {WORKSPACE_IMPORT} from "../actions/workspace.actions";
+import nodeCreate from "./workspace/nodeCreate";
+import {NODE_CREATE, NODE_SELECT, NODE_UPDATE} from "../actions/node.actions";
+import nodeUpdate from "./workspace/nodeUpdate";
+import nodeSelect from "./workspace/nodeSelect";
 
 const initialState: Workspace | null = null;
 
 export const workspace = (state: Workspace | null = initialState, action: Action) => {
   switch (action.type) {
+    case NODE_CREATE:
+      return nodeCreate(state);
+    case NODE_UPDATE:
+      return nodeUpdate(state, action.payload.node);
+    case NODE_SELECT:
+      return nodeSelect(state, action.payload.nodeId);
     case WORKSPACE_IMPORT:
       return action.payload.workspace;
     case VIEW_DELETE:

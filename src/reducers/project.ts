@@ -23,17 +23,17 @@ export const project = (state: Project | null = initialState, action: Action) =>
       return nodePropertyRename(state, action);
     case NODE_PROPERTY_UPDATE:
       return nodePropertyUpdate(state, action);
-    case NODE_ADD:
-      const view = getViewById(state, action.payload.viewId);
-      if (!view) return state;
-      if (!action.payload.parentId) {
-        view.config = action.payload.node;
-        return {...state};
-      }
-      const parent = findNodeById(view?.config || '', action.payload.parentId);
-      parent.children = parent.children || [];
-      parent.children.push(action.payload.node);
-      return {...state};
+    // case NODE_ADD:
+    //   const view = getViewById(state, action.payload.viewId);
+    //   if (!view) return state;
+    //   if (!action.payload.parentId) {
+    //     view.config = action.payload.node;
+    //     return {...state};
+    //   }
+    //   const parent = findNodeById(view?.config || '', action.payload.parentId);
+    //   parent.children = parent.children || [];
+    //   parent.children.push(action.payload.node);
+    //   return {...state};
     case VIEW_SET_AS_MAIN:
       return {
         ...state,

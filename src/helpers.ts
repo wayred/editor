@@ -1,7 +1,39 @@
-import {ApplicationState, TreeNode} from "./types";
+import {ApplicationState, TreeNode, Workspace} from "./types";
 import {ComponentConfig, Project, PropType, View} from "@wayred/core";
 import _ from "lodash";
 import { v4 as uuidv4 } from 'uuid';
+import {workspace} from "./reducers/workspace.reducer";
+
+/**
+ * Finds the node identified by "id" in the given component tree "root". If the node is not found or
+ * no root is specified, null is returned.
+ *
+ * @param root the root node of the tree
+ * @param id the node id to search for
+ */
+export const findNodeById = (root: ComponentConfig | null, id: string | null): ComponentConfig | null => {
+  if (!root || !id) return null;
+  if (root.id === id) return root;
+  if (root.children) {
+    for (let i = 0; i < root.children.length; i++) {
+      const node: any = findNodeById(root.children[i], id);
+      if (node !== null) {
+        return node;
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * Get the selected view in the workspace specified, or null if there is no view selected.
+ *
+ * @param workspace the workspace containing the open project.
+ */
+export const getSelectedView = (workspace: Workspace): View | null => {
+  if (!workspace || !workspace.project || !workspace.project.views || !workspace.selectedViewId) return null;
+  return workspace.project.views[workspace.selectedViewId];
+}
 
 export const builderConfigToTreeNode = (cfg: ComponentConfig | string): TreeNode => {
   if (typeof cfg === 'string') {
@@ -15,20 +47,6 @@ export const builderConfigToTreeNode = (cfg: ComponentConfig | string): TreeNode
     label: cfg.name || cfg.component,
     children: cfg.children?.map((child: ComponentConfig | string) => builderConfigToTreeNode(child))
   }
-}
-
-export const findNodeById = (cfg: ComponentConfig | string, id: string) => {
-  if (typeof cfg === 'string') return null;
-  if (cfg.id === id) return cfg;
-  if (cfg.children) {
-    for (let i = 0; i < cfg.children.length; i++) {
-      const node: any = findNodeById(cfg.children[i], id);
-      if (node !== null) {
-        return node;
-      }
-    }
-  }
-  return null;
 }
 
 export const deleteNodeById = (cfg: ComponentConfig | string, id: string) => {
@@ -57,13 +75,6 @@ export const randomString = (length: number) => {
   return result;
 }
 
-export const getSelectedView = (state: ApplicationState): View | null => {
-  if (!state.selectedView || !state.project?.views)
-    return null;
-  const result = _.find(state.project.views, view => view?.id === state.selectedView);
-  return result ? result : null;
-}
-
 export const getViewById = (project: Project | null, viewId: string) => {
   if (!project || !project.views)
     return null;
@@ -79,14 +90,6 @@ export const getNodeById = (project: Project | null, nodeId: string) => {
   //     return node;
   // }
   return null;
-}
-
-export const newNode = (): ComponentConfig => {
-  return {
-    id: uuid(),
-    component: 'View',
-    props: {}
-  }
 }
 
 export const uuid = () => {
