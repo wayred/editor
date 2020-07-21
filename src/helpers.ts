@@ -30,9 +30,19 @@ export const findNodeById = (root: ComponentConfig | null, id: string | null): C
  *
  * @param workspace the workspace containing the open project.
  */
-export const getSelectedView = (workspace: Workspace): View | null => {
+export const getSelectedView = (workspace: Workspace | null): View | null => {
   if (!workspace || !workspace.project || !workspace.project.views || !workspace.selectedViewId) return null;
   return workspace.project.views[workspace.selectedViewId];
+}
+
+/**
+ *
+ * @param workspace
+ */
+export const getSelectedNode = (workspace: Workspace | null): ComponentConfig | null => {
+  const view = getSelectedView(workspace);
+  if (!view || !workspace || !workspace.selectedNodeId) return null;
+  return findNodeById(view.config, workspace.selectedNodeId);
 }
 
 export const builderConfigToTreeNode = (cfg: ComponentConfig | string): TreeNode => {

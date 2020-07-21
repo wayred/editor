@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import _ from "lodash";
 import {Dispatch} from "redux";
 import {nodePropertyUpdate} from "../../actions/node";
+import {getSelectedNode} from "../../helpers";
 
 type PropPanelProps = {
   selectedNode: ComponentConfig;
@@ -106,7 +107,7 @@ const PropPanel = (props: PropPanelProps) => {
 }
 const mapStateToProps = (state: ApplicationState) => {
   return {
-    selectedNode: state.selectedNode,
+    selectedNode: getSelectedNode(state.workspace)!,
     components: state.registry?.components || [],
     metadata: state.registry?.metadata
   }
